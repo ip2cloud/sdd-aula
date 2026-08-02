@@ -11,3 +11,4 @@ python -m pytest -m aceitacao -v
 python verificar.py
 git status --short
 ```
+# sdd-aula
