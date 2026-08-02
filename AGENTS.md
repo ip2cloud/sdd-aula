@@ -61,9 +61,10 @@ Não trate `1` como falha interna. Preserve o contrato em todo ambiente.
 
 - Tipifique fronteiras; use dados imutáveis; faça regras apenas devolverem ocorrências.
 - Construa `Decimal` direto da string; explicite escala e arredondamento.
-- Crie arquivo versionado para regra nova ou correção; registre ID, versão, escopo e severidade.
+- Implemente regras como funções puras; registre cada ID e versão explicitamente uma vez. Nunca use autorregistro por importação.
 - Trate namespaces e ordene inventário, ocorrências e CSV deterministicamente.
-- No CSV, use só nomes de arquivo e contagens; nunca data, horário, duração, caminho absoluto, máquina ou usuário. Mande todo dado variável apenas ao log JSON da saída padrão.
+- No CSV, use só nomes de arquivo e contagens; nunca data, horário, duração, caminho, máquina ou usuário. Use rank externo de severidade, não ordem alfabética. Mande variável só ao log JSON.
+- Formate números com hífen ASCII, ponto e duas casas, sem milhar, moeda ou locale. Compare `abs(vNF - soma)` com a tolerância, mas preserve o sinal no motivo e em `valor`.
 - Não exponha dado fiscal no log. Garanta `lidos = processados + ilegíveis` e continue após ilegível.
 - Teste acerto, erro e falso positivo por regra usando cópias temporárias.
 
@@ -73,6 +74,7 @@ Não trate `1` como falha interna. Preserve o contrato em todo ambiente.
 - Nunca omita ilegível nem aborte o lote por ele.
 - Nunca escreva fora da saída; entrada é somente leitura.
 - Nunca fixe caminho, configuração, segredo ou dado de cliente.
+- Nunca embuta severidade, bloqueio, rank ou tolerância no código; leia-os da configuração externa.
 - Nunca persista cache, histórico ou estado.
 - Nunca antecipe fase sem mudar PRD, PLAN e tasks.
 - Nunca altere PRD, AGENTS ou o manifesto de fixtures sem revisão humana; PLAN e tasks mudam apenas com evidência do ciclo.

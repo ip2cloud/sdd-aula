@@ -107,19 +107,19 @@ Dependências devem ter versão fixada e finalidade explícita. Nenhuma bibliote
 
 **Contexto:** as validações fiscais e estruturais crescerão ao longo do tempo. Regras por documento precisam ser independentes para permitir testes isolados e execução paralela; regras do lote precisam usar o mesmo contrato operacional sem se misturar às primeiras.
 
-**Escolha:** cada regra viverá em seu próprio arquivo e será registrada em um registry. Todas obedecerão à mesma assinatura lógica: recebem um contexto imutável apropriado ao seu escopo e devolvem zero ou mais ocorrências, sem efeitos colaterais. O registry declarará se a regra atua por documento ou sobre o lote. Regra nova significa arquivo novo; uma regra existente não será ampliada para absorver outro comportamento.
+**Escolha:** cada regra será uma função pura em seu próprio arquivo e será registrada de forma explícita em um registry. Todas obedecerão à mesma assinatura lógica: recebem um contexto imutável apropriado ao seu escopo e devolvem zero ou mais ocorrências, sem efeitos colaterais. O registry declarará ID, versão e escopo da regra. Regra nova significa arquivo novo; uma regra existente não será ampliada para absorver outro comportamento.
 
 **Motivo:** o isolamento reduz o impacto de mudanças, torna cada regra rastreável e testável e permite paralelizar regras por documento. A assinatura única simplifica coordenação, consolidação e instrumentação.
 
-**Alternativa rejeitada:** um validador único com uma cadeia de condicionais. Foi rejeitado porque tende a se transformar em um arquivo extenso, potencialmente com centenas de linhas, no qual qualquer alteração pode afetar todas as validações.
+**Alternativas rejeitadas:** um validador único com uma cadeia de condicionais, porque concentra risco; classes de regra, porque adicionam estado e cerimônia sem benefício na Fase 1; e registro automático por importação ou decorador, porque depende de efeito colateral e pode omitir silenciosamente uma regra não importada.
 
-**Consequência:** haverá mais arquivos pequenos e o registry passa a ser um contrato central. Arquivos de regras existentes são imutáveis. Tanto um novo critério quanto a correção de um comportamento serão introduzidos em um novo arquivo, com nova versão ou identificação, testes próprios e troca explícita no registry. Isso preserva a rastreabilidade do comportamento anterior.
+**Consequência:** haverá mais arquivos pequenos e o registry passa a ser um contrato central verificável. Testes provarão que toda regra esperada está registrada uma vez e é executada uma vez. Arquivos de regras existentes são imutáveis. Tanto um novo critério quanto a correção de um comportamento serão introduzidos em um novo arquivo, com nova versão ou identificação, testes próprios e troca explícita no registry.
 
 ### D2 — Valores monetários exclusivamente decimais
 
 **Contexto:** conferências fiscais exigem igualdade monetária exata. Uma divergência criada pelo próprio sistema destrói a confiança do analista e viola o critério de zero alerta indevido.
 
-**Escolha:** todo valor monetário será representado como `Decimal`, criado diretamente a partir da string presente no XML. O uso de `float` é proibido em todo o projeto, inclusive em testes, cálculos intermediários, comparações e geração do relatório.
+**Escolha:** todo valor monetário será representado como `Decimal`, criado diretamente a partir da string presente no XML. O uso de `float` é proibido em todo o projeto, inclusive em testes, cálculos intermediários, comparações e geração do relatório. Na regra de total, `diferenca = vNF - soma dos vProd` preserva o sinal, mas a ocorrência é decidida por `abs(diferenca) > tolerancia`. O texto e o valor do CSV usam hífen ASCII, ponto decimal, exatamente duas casas, nenhum separador de milhar ou moeda e nenhuma dependência da localização do sistema.
 
 **Motivo:** números decimais preservam a representação exata dos valores fiscais e permitem que regras de escala e arredondamento sejam explícitas, em vez de dependerem de aproximações binárias.
 
@@ -167,13 +167,15 @@ Dependências devem ter versão fixada e finalidade explícita. Nenhuma bibliote
 
 **Contexto:** o analista precisa de um artefato simples para conferir e compartilhar, enquanto a operação agendada precisa de registros que possam ser coletados automaticamente.
 
-**Escolha:** gerar relatório CSV em UTF-8 na pasta de saída e emitir logs JSON na saída padrão. O CSV será ordenado e comparável byte a byte: a mesma entrada, configuração e versão devem produzir exatamente os mesmos bytes. Ele não conterá horário, data de execução, duração, caminho absoluto, nome da máquina ou usuário. Ocorrências registrarão somente o nome do arquivo, nunca seu caminho. Se houver resumo, ele conterá apenas as contagens de lidos, processados, ilegíveis e ocorrências por severidade. Todo dado variável existirá exclusivamente no log JSON da saída padrão. O relatório contém dados de negócio; o log contém eventos de execução.
+**Escolha:** gerar `relatorio.csv` em UTF-8 na pasta de saída e emitir logs JSON na saída padrão. O cabeçalho fixo será `tipo,arquivo,regra,severidade,motivo,valor`. O resumo terá uma linha por contador, sempre na ordem `lidos`, `processados`, `ilegiveis`, `bloqueantes`, `avisos`; depois virão as ocorrências. A coluna `tipo` aceitará `resumo` e `ocorrencia`. Ocorrências registrarão somente o nome do arquivo; quando houver valor natural, `valor` conterá o dado formatado para filtro, além do motivo em prosa. Regras sem valor natural deixarão a coluna vazia. O motivo da regra de total seguirá exatamente `Total da nota {vNF} difere da soma dos produtos {soma} em {diferenca}; tolerância {tolerancia}.`
+
+O CSV será comparável byte a byte: não conterá horário, data de execução, duração, caminho absoluto, máquina ou usuário. Todo dado variável existirá exclusivamente no log JSON. A configuração externa definirá o nome de cada severidade, se é bloqueante e seu rank numérico. Ocorrências serão ordenadas pelo rank, depois por arquivo e regra; nunca pela ordem alfabética da severidade.
 
 **Motivo:** CSV é portátil e abre em ferramentas já usadas pela equipe, sem exigir interface gráfica da aplicação. JSON na saída padrão atende operação local e em contêiner sem arquivo de log próprio.
 
 **Alternativas rejeitadas:** relatório HTML, por se aproximar de uma interface e exigir decisões de apresentação fora do escopo; planilha, porque o formato pode embutir metadados variáveis, como horários de criação, e impedir comparação byte a byte, quebrando a exigência de saída reproduzível; e logs em arquivo, por criar escrita operacional e rotação desnecessárias.
 
-**Consequência:** o contrato de colunas, codificação, terminadores de linha, ordenação, nomes de arquivo, resumo e severidades do CSV será versionado e testado por comparação byte a byte entre execuções feitas em caminhos diferentes. Informações sensíveis não devem ser despejadas nos logs.
+**Consequência:** o contrato de colunas, largura uniforme, codificação, terminadores de linha, ordenação, formatação numérica, resumo e severidades será versionado e testado por comparação byte a byte entre caminhos diferentes. Não serão adicionadas colunas específicas por regra, pois isso criaria tabela larga e esparsa; se detalhes heterogêneos se tornarem necessários na Fase 2, será avaliado um arquivo separado. Informações sensíveis não devem ser despejadas nos logs.
 
 ## 4. Fases de entrega
 
@@ -248,6 +250,7 @@ A Fase 4 só será barata se as Fases 1 a 3 respeitarem desde o início os requi
 - **Dados sensíveis nos registros:** logs estruturados facilitam operação, mas não devem expor conteúdo fiscal desnecessário.
 - **Meta de desempenho sem volume de referência:** cinco minutos só é verificável depois de fixar quantidade e tamanho máximos do lote e capacidade mínima da máquina.
 - **CSV e regionalização:** acentos, separador de campos e abertura em diferentes ferramentas podem afetar a experiência do analista; o contrato precisa ser validado com arquivos reais.
+- **Nota sem itens:** a regra de total somaria zero e poderia acusar o valor integral da nota. A decisão de negócio provavelmente é alertar, mas deve ser confirmada antes da produção; não bloqueia a Fase 1 porque o caso não existe no lote de aceite.
 
 ### Premissas
 
