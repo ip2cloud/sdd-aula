@@ -1,0 +1,14 @@
+[rules.total_note_vs_products_v1]
+tolerance = "0.01"
+severity = "alta"
+
+[xml]
+unreadable_severity = "alta"
+
+[severities.alta]
+blocking = true
+rank = 10
+
+[severities.aviso]
+blocking = false
+rank = 20

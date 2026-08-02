@@ -7,7 +7,9 @@ name = "nfe-auditor"
 version = "0.0.0"
 description = "Auditoria determinística de XMLs de NF-e"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+  "lxml==6.0.2",
+]
 
 [project.optional-dependencies]
 test = [
@@ -17,6 +19,7 @@ test = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]
 markers = [
   "aceitacao: critérios de aceite da fase em execução",
 ]

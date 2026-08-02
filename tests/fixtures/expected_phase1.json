@@ -1,0 +1,13 @@
+{
+  "rules": {
+    "total_note_vs_products_v1": {
+      "expected": 2,
+      "files": [
+        "NFe_0004.xml",
+        "NFe_0038.xml"
+      ],
+      "false_positive": 0
+    }
+  },
+  "notes_without_total_divergence": 48
+}

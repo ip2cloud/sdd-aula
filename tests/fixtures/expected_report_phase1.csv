@@ -1,0 +1,8 @@
+tipo,arquivo,regra,severidade,motivo,valor
+resumo,,lidos,,,50
+resumo,,processados,,,50
+resumo,,ilegiveis,,,0
+resumo,,bloqueantes,,,2
+resumo,,avisos,,,0
+ocorrencia,NFe_0004.xml,total_note_vs_products_v1,alta,Total da nota 876.25 difere da soma dos produtos 1126.25 em -250.00; tolerância 0.01.,-250.00
+ocorrencia,NFe_0038.xml,total_note_vs_products_v1,alta,Total da nota -104.80 difere da soma dos produtos 145.20 em -250.00; tolerância 0.01.,-250.00

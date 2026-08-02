@@ -1,5 +1,6 @@
 import csv
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -25,6 +26,14 @@ def _require_phase1() -> None:
 
 def _run_auditor(input_dir: Path, output_dir: Path) -> subprocess.CompletedProcess[str]:
     output_dir.mkdir()
+    environment = os.environ.copy()
+    source_dir = str((Path.cwd() / "src").resolve())
+    current_pythonpath = environment.get("PYTHONPATH")
+    environment["PYTHONPATH"] = (
+        source_dir
+        if not current_pythonpath
+        else os.pathsep.join((source_dir, current_pythonpath))
+    )
     return subprocess.run(
         [
             sys.executable,
@@ -40,6 +49,7 @@ def _run_auditor(input_dir: Path, output_dir: Path) -> subprocess.CompletedProce
         check=False,
         capture_output=True,
         text=True,
+        env=environment,
     )
 
 
