@@ -1,6 +1,5 @@
 import csv
 import json
-import os
 import shutil
 import subprocess
 import sys
@@ -26,14 +25,6 @@ def _require_phase1() -> None:
 
 def _run_auditor(input_dir: Path, output_dir: Path) -> subprocess.CompletedProcess[str]:
     output_dir.mkdir()
-    environment = os.environ.copy()
-    source_dir = str((Path.cwd() / "src").resolve())
-    current_pythonpath = environment.get("PYTHONPATH")
-    environment["PYTHONPATH"] = (
-        source_dir
-        if not current_pythonpath
-        else os.pathsep.join((source_dir, current_pythonpath))
-    )
     return subprocess.run(
         [
             sys.executable,
@@ -49,8 +40,20 @@ def _run_auditor(input_dir: Path, output_dir: Path) -> subprocess.CompletedProce
         check=False,
         capture_output=True,
         text=True,
-        env=environment,
     )
+
+
+def _assert_program_executed(result: subprocess.CompletedProcess[str]) -> list[dict]:
+    evidence = f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}"
+    assert "No module named" not in result.stderr, evidence
+    try:
+        events = [json.loads(line) for line in result.stdout.splitlines() if line]
+    except json.JSONDecodeError as exc:
+        pytest.fail(f"saída padrão não é JSON válido: {exc}\n{evidence}")
+    assert events, f"programa não emitiu log JSON\n{evidence}"
+    assert any(event.get("event") == "execution_completed" for event in events), evidence
+    assert result.returncode == 1, evidence
+    return events
 
 
 def _rule_files(output_dir: Path) -> list[str]:
@@ -65,7 +68,7 @@ def _rule_files(output_dir: Path) -> list[str]:
 def test_encontra_as_duas_divergencias_esperadas(tmp_path: Path) -> None:
     _require_phase1()
     result = _run_auditor(FIXTURES, tmp_path / "output")
-    assert result.returncode == 1
+    _assert_program_executed(result)
     assert set(_rule_files(tmp_path / "output")) == EXPECTED_DIVERGENT_FILES
 
 
@@ -73,7 +76,7 @@ def test_encontra_as_duas_divergencias_esperadas(tmp_path: Path) -> None:
 def test_nao_gera_falso_positivo_da_regra(tmp_path: Path) -> None:
     _require_phase1()
     result = _run_auditor(FIXTURES, tmp_path / "output")
-    assert result.returncode == 1
+    _assert_program_executed(result)
     files = _rule_files(tmp_path / "output")
     assert len(files) == 2
     assert set(files) == EXPECTED_DIVERGENT_FILES
@@ -92,7 +95,7 @@ def test_regra_e_generica_e_nao_decora_nome(tmp_path: Path) -> None:
     tree.write(altered_file, encoding="utf-8", xml_declaration=True)
 
     result = _run_auditor(altered_input, tmp_path / "output")
-    assert result.returncode == 1
+    _assert_program_executed(result)
     assert set(_rule_files(tmp_path / "output")) == {
         *EXPECTED_DIVERGENT_FILES,
         "NFe_0001.xml",
@@ -103,7 +106,6 @@ def test_regra_e_generica_e_nao_decora_nome(tmp_path: Path) -> None:
 def test_contagens_fecham(tmp_path: Path) -> None:
     _require_phase1()
     result = _run_auditor(FIXTURES, tmp_path / "output")
-    assert result.returncode == 1
-    events = [json.loads(line) for line in result.stdout.splitlines() if line]
+    events = _assert_program_executed(result)
     summary = next(event for event in events if "lidos" in event)
     assert summary["lidos"] == summary["processados"] + summary["ilegíveis"]

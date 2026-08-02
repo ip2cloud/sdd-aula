@@ -8,10 +8,10 @@ Gere relatório CSV reproduzível, sem estado e sem falso positivo no lote de ac
 
 ## Comandos
 
-Use Python 3.11+ na raiz.
+Use Python 3.11+ na raiz. Prefira Python 3.12, versão testada para instalação editável.
 
 ```bash
-python3.11 -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[test]'
 
@@ -30,9 +30,10 @@ python -m pytest -q
 python -m pytest -m aceitacao -v
 python verificar.py
 git status --short
+python -m nfe_auditor --input tests/fixtures/xmls --output build/output --config config.example.toml
 ```
 
-`verificar.py` compara esperado × achado por regra nas fixtures e imprime `FASE PROVADA` ou `NÃO PASSOU`. `git status --short` detecta arquivos fora do manifesto do DESIGN. Se qualquer comando falhar, a feature não está pronta. Não afrouxe testes.
+`verificar.py` compara esperado × achado por regra nas fixtures e imprime `FASE PROVADA` ou `NÃO PASSOU`. `git status --short` detecta arquivos fora do manifesto do DESIGN. O sexto comando prova a instalação e a execução real em subprocesso limpo, sem `PYTHONPATH`; ele passa somente com retorno `1` e `build/output/relatorio.csv` contendo cinco linhas de resumo e duas ocorrências. Qualquer outro retorno ou conteúdo reprova. Se qualquer comando falhar — considerando `1` como o sucesso esperado do sexto —, a feature não está pronta. Não afrouxe testes. Teste verde com entrega inexequível é erro silencioso.
 
 No scaffold, o portão deve rodar com testes comuns passando, todos os aceites explicitamente pulados e `verificar.py` imprimindo `FASE 1 AINDA NÃO IMPLEMENTADA` mais o próximo comando. Aceite passando antes de existir sistema é defeito do teste. Depois da F1-07, qualquer aceite pulado reprova a fase.
 

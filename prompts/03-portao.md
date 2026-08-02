@@ -13,9 +13,10 @@ python -m pytest -q
 python -m pytest -m aceitacao -v
 python verificar.py
 git status --short
+python -m nfe_auditor --input tests/fixtures/xmls --output build/output --config config.example.toml
 
-Para cada comando, informe código de retorno e resumo da saída. Interprete os aceites conforme AGENTS.md: no scaffold, devem estar explicitamente pulados e nunca aprovados; depois da F1-07, qualquer aceite pulado reprova a fase. Interprete verificar.py como `FASE 1 AINDA NÃO IMPLEMENTADA` no scaffold, `FASE PROVADA` no aceite concluído ou `NÃO PASSOU` em reprovação. Use `git status --short` para apontar arquivo fora do manifesto da tarefa.
+Para cada comando, informe código de retorno e resumo da saída. Interprete os aceites conforme AGENTS.md: no scaffold, devem estar explicitamente pulados e nunca aprovados; depois da F1-07, qualquer aceite pulado reprova a fase. Interprete verificar.py como `FASE 1 AINDA NÃO IMPLEMENTADA` no scaffold, `FASE PROVADA` no aceite concluído ou `NÃO PASSOU` em reprovação. Use `git status --short` para apontar arquivo fora do manifesto da tarefa. Execute o sexto comando em subprocesso limpo, sem definir `PYTHONPATH`: o resultado aprovado é retorno `1` e `build/output/relatorio.csv` com cinco linhas de resumo e duas ocorrências. Qualquer outro retorno, falha de importação ou relatório diferente reprova.
 
-Se um comando falhar ou o resultado não corresponder ao estágio, declare `FEATURE NÃO PRONTA`, identifique a causa verificável e mande voltar ao iterate; não vá ao ship. Só declare `PORTÃO APROVADO` quando os cinco comandos e o critério do tasks.md forem satisfeitos.
+Se um comando falhar ou o resultado não corresponder ao estágio, declare `FEATURE NÃO PRONTA`, identifique a causa verificável e mande voltar ao iterate; não vá ao ship. Só declare `PORTÃO APROVADO` quando os seis comandos e o critério do tasks.md forem satisfeitos. No sexto comando, retorno `1` é o sucesso de negócio esperado, não falha interna.
 
 Cite a origem das restrições: PRD.md para produto, PLAN.md para decisões, tasks.md para aceite e AGENTS.md para procedimento. Se a interpretação depender de informação ausente, pergunte; não suponha nem invente requisito.

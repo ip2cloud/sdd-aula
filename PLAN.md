@@ -177,6 +177,18 @@ O CSV será comparável byte a byte: não conterá horário, data de execução,
 
 **Consequência:** o contrato de colunas, largura uniforme, codificação, terminadores de linha, ordenação, formatação numérica, resumo e severidades será versionado e testado por comparação byte a byte entre caminhos diferentes. Não serão adicionadas colunas específicas por regra, pois isso criaria tabela larga e esparsa; se detalhes heterogêneos se tornarem necessários na Fase 2, será avaliado um arquivo separado. Informações sensíveis não devem ser despejadas nos logs.
 
+### D7 — O portão prova a execução instalada
+
+**Contexto:** testes e o verificador podem importar o código diretamente no próprio processo e permanecer verdes mesmo quando a instalação editável está quebrada. Nesse cenário, a lógica funciona no arnês, mas o comando entregue ao usuário não inicia.
+
+**Escolha:** o portão executará, além das verificações internas, `python -m nfe_auditor --input tests/fixtures/xmls --output build/output --config config.example.toml` em subprocesso limpo, sem `PYTHONPATH` manual. O aceite exige retorno `1`, pois o lote contém bloqueantes, e `build/output/relatorio.csv` com cinco linhas de resumo e duas ocorrências.
+
+**Motivo:** teste verde com entrega quebrada é erro silencioso. O portão precisa provar a execução do produto instalado, não apenas sua lógica importada pelos testes.
+
+**Alternativa rejeitada:** considerar suficientes `pytest` e `verificar.py`. Foi rejeitada porque ambos podem alcançar `src/` pelo processo de teste e deixar de detectar uma instalação que não expõe `nfe_auditor` ao interpretador.
+
+**Consequência:** falha de importação, contrato de retorno incorreto ou relatório ausente/malformado reprova o ciclo, mesmo com todos os testes internos verdes. O ambiente de desenvolvimento recomendado e testado usa Python 3.12; o requisito do produto permanece Python 3.11 ou superior.
+
 ## 4. Fases de entrega
 
 ### Fase 1 — Primeira conferência útil
