@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nfeProc versao="4.00" xmlns="http://www.portalfiscal.inf.br/nfe">
+  <NFe>
+    <infNFe versao="4.00" Id="NFe42260711131017000102550010000000291735093980">
+      <ide>
+        <cUF>42</cUF>
+        <cNF>73509398</cNF>
+        <natOp>Venda de mercadoria</natOp>
+        <mod>55</mod>
+        <serie>1</serie>
+        <nNF>29</nNF>
+        <dhEmi>2026-07-02T10:30:00-03:00</dhEmi>
+        <tpNF>1</tpNF>
+        <idDest>1</idDest>
+        <cMunFG>4209102</cMunFG>
+        <tpImp>1</tpImp>
+        <tpEmis>1</tpEmis>
+        <cDV>0</cDV>
+        <tpAmb>2</tpAmb>
+        <finNFe>1</finNFe>
+        <indFinal>0</indFinal>
+        <indPres>9</indPres>
+        <procEmi>0</procEmi>
+        <verProc>4.00</verProc>
+      </ide>
+      <emit>
+        <CNPJ>11131017000102</CNPJ>
+        <xNome>Papelaria Central Ltda</xNome>
+        <enderEmit>
+          <xLgr>Rua Industrial</xLgr>
+          <nro>2019</nro>
+          <xBairro>Distrito Industrial</xBairro>
+          <cMun>4209102</cMun>
+          <xMun>Joinville</xMun>
+          <UF>SC</UF>
+          <CEP>33460385</CEP>
+          <cPais>1058</cPais>
+          <xPais>BRASIL</xPais>
+        </enderEmit>
+        <IE>961701998065</IE>
+        <CRT>3</CRT>
+      </emit>
+      <dest>
+        <CNPJ>11222333000181</CNPJ>
+        <xNome>Construtora Horizonte Ltda</xNome>
+        <enderDest>
+          <xLgr>Avenida das Obras</xLgr>
+          <nro>1200</nro>
+          <xBairro>Centro</xBairro>
+          <cMun>3550308</cMun>
+          <xMun>Sao Paulo</xMun>
+          <UF>SP</UF>
+          <CEP>01310100</CEP>
+          <cPais>1058</cPais>
+          <xPais>BRASIL</xPais>
+        </enderDest>
+        <indIEDest>1</indIEDest>
+        <IE>114233445556</IE>
+      </dest>
+    <det nItem="1">
+      <prod>
+        <cProd>1001</cProd>
+        <cEAN>SEM GTIN</cEAN>
+        <xProd>Luva de seguranca tamanho G</xProd>
+        <NCM>61161000</NCM>
+        <CFOP>5102</CFOP>
+        <uCom>PAR</uCom>
+        <qCom>10.0000</qCom>
+        <vUnCom>12.7500</vUnCom>
+        <vProd>127.50</vProd>
+        <cEANTrib>SEM GTIN</cEANTrib>
+        <uTrib>PAR</uTrib>
+        <qTrib>10.0000</qTrib>
+        <vUnTrib>12.7500</vUnTrib>
+        <indTot>1</indTot>
+      </prod>
+      <imposto>
+        <ICMS>
+          <ICMS00>
+            <orig>0</orig>
+            <CST>00</CST>
+            <modBC>3</modBC>
+            <vBC>127.50</vBC>
+            <pICMS>18.00</pICMS>
+            <vICMS>22.95</vICMS>
+          </ICMS00>
+        </ICMS>
+        <PIS>
+          <PISAliq>
+            <CST>01</CST>
+            <vBC>127.50</vBC>
+            <pPIS>1.65</pPIS>
+            <vPIS>2.10</vPIS>
+          </PISAliq>
+        </PIS>
+        <COFINS>
+          <COFINSAliq>
+            <CST>01</CST>
+            <vBC>127.50</vBC>
+            <pCOFINS>7.60</pCOFINS>
+            <vCOFINS>9.69</vCOFINS>
+          </COFINSAliq>
+        </COFINS>
+      </imposto>
+    </det>
+    <det nItem="2">
+      <prod>
+        <cProd>1002</cProd>
+        <cEAN>SEM GTIN</cEAN>
+        <xProd>Disco de corte 7 polegadas</xProd>
+        <NCM>68042210</NCM>
+        <CFOP>5102</CFOP>
+        <uCom>UN</uCom>
+        <qCom>25.0000</qCom>
+        <vUnCom>9.6000</vUnCom>
+        <vProd>240.00</vProd>
+        <cEANTrib>SEM GTIN</cEANTrib>
+        <uTrib>UN</uTrib>
+        <qTrib>25.0000</qTrib>
+        <vUnTrib>9.6000</vUnTrib>
+        <indTot>1</indTot>
+      </prod>
+      <imposto>
+        <ICMS>
+          <ICMS00>
+            <orig>0</orig>
+            <CST>00</CST>
+            <modBC>3</modBC>
+            <vBC>240.00</vBC>
+            <pICMS>18.00</pICMS>
+            <vICMS>43.20</vICMS>
+          </ICMS00>
+        </ICMS>
+        <PIS>
+          <PISAliq>
+            <CST>01</CST>
+            <vBC>240.00</vBC>
+            <pPIS>1.65</pPIS>
+            <vPIS>3.96</vPIS>
+          </PISAliq>
+        </PIS>
+        <COFINS>
+          <COFINSAliq>
+            <CST>01</CST>
+            <vBC>240.00</vBC>
+            <pCOFINS>7.60</pCOFINS>
+            <vCOFINS>18.24</vCOFINS>
+          </COFINSAliq>
+        </COFINS>
+      </imposto>
+    </det>
+    <det nItem="3">
+      <prod>
+        <cProd>1003</cProd>
+        <cEAN>SEM GTIN</cEAN>
+        <xProd>Oleo lubrificante 1L</xProd>
+        <NCM>27101932</NCM>
+        <CFOP>5102</CFOP>
+        <uCom>UN</uCom>
+        <qCom>12.0000</qCom>
+        <vUnCom>34.0000</vUnCom>
+        <vProd>408.00</vProd>
+        <cEANTrib>SEM GTIN</cEANTrib>
+        <uTrib>UN</uTrib>
+        <qTrib>12.0000</qTrib>
+        <vUnTrib>34.0000</vUnTrib>
+        <indTot>1</indTot>
+      </prod>
+      <imposto>
+        <ICMS>
+          <ICMS00>
+            <orig>0</orig>
+            <CST>00</CST>
+            <modBC>3</modBC>
+            <vBC>408.00</vBC>
+            <pICMS>18.00</pICMS>
+            <vICMS>73.44</vICMS>
+          </ICMS00>
+        </ICMS>
+        <PIS>
+          <PISAliq>
+            <CST>01</CST>
+            <vBC>408.00</vBC>
+            <pPIS>1.65</pPIS>
+            <vPIS>6.73</vPIS>
+          </PISAliq>
+        </PIS>
+        <COFINS>
+          <COFINSAliq>
+            <CST>01</CST>
+            <vBC>408.00</vBC>
+            <pCOFINS>7.60</pCOFINS>
+            <vCOFINS>31.01</vCOFINS>
+          </COFINSAliq>
+        </COFINS>
+      </imposto>
+    </det>
+      <total>
+        <ICMSTot>
+          <vBC>775.50</vBC>
+          <vICMS>139.59</vICMS>
+          <vICMSDeson>0.00</vICMSDeson>
+          <vFCP>0.00</vFCP>
+          <vBCST>0.00</vBCST>
+          <vST>0.00</vST>
+          <vProd>775.50</vProd>
+          <vFrete>0.00</vFrete>
+          <vSeg>0.00</vSeg>
+          <vDesc>0.00</vDesc>
+          <vII>0.00</vII>
+          <vIPI>0.00</vIPI>
+          <vPIS>12.79</vPIS>
+          <vCOFINS>58.94</vCOFINS>
+          <vOutro>0.00</vOutro>
+          <vNF>775.50</vNF>
+        </ICMSTot>
+      </total>
+      <transp>
+        <modFrete>9</modFrete>
+      </transp>
+      <pag>
+        <detPag>
+          <indPag>1</indPag>
+          <tPag>15</tPag>
+          <vPag>775.50</vPag>
+        </detPag>
+      </pag>
+    </infNFe>
+  </NFe>
+  <protNFe versao="4.00">
+    <infProt>
+      <tpAmb>2</tpAmb>
+      <verAplic>SVRS</verAplic>
+      <chNFe>42260711131017000102550010000000291735093980</chNFe>
+      <dhRecbto>2026-07-02T10:37:00-03:00</dhRecbto>
+      <nProt>193514290137203</nProt>
+      <digVal>ABCDEFGHIJKLMNOPQRSTUVWXYZ12=</digVal>
+      <cStat>100</cStat>
+      <xMotivo>Autorizado o uso da NF-e</xMotivo>
+    </infProt>
+  </protNFe>
+</nfeProc>
